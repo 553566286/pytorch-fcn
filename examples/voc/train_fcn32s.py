@@ -92,19 +92,18 @@ def main():
 
     # 1. dataset
 
-    root = osp.expanduser('~/data/datasets')
+    root = osp.expanduser('/data/yu/hair/data/data_with_face/')
     kwargs = {'num_workers': 4, 'pin_memory': True} if cuda else {}
     train_loader = torch.utils.data.DataLoader(
-        torchfcn.datasets.SBDClassSeg(root, split='train', transform=True),
-        batch_size=1, shuffle=True, **kwargs)
+        torchfcn.datasets.VOCClassSegBase(root, split='train', transform=True),
+        batch_size=128, shuffle=True,  **kwargs)
     val_loader = torch.utils.data.DataLoader(
-        torchfcn.datasets.VOC2011ClassSeg(
-            root, split='seg11valid', transform=True),
-        batch_size=1, shuffle=False, **kwargs)
+        torchfcn.datasets.VOCClassSegBase(
+            root, split='val', transform=True), batch_size=128, shuffle=False, **kwargs)
 
     # 2. model
 
-    model = torchfcn.models.FCN32s(n_class=21)
+    model = torchfcn.models.FCN32s(n_class=2)
     start_epoch = 0
     start_iteration = 0
     if args.resume:
